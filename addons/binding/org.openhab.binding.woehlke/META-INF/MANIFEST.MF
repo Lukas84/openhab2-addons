@@ -23,3 +23,5 @@ Import-Package:
  org.eclipse.smarthome.core.types,
  org.slf4j
 Service-Component: OSGI-INF/*.xml
+Require-Bundle: org.slf4j.log4j,
+ org.eclipse.jetty.client

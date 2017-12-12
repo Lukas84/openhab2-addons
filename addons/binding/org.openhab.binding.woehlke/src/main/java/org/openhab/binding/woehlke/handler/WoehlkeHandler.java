@@ -14,14 +14,21 @@ package org.openhab.binding.woehlke.handler;
 
 import static org.openhab.binding.woehlke.WoehlkeBindingConstants.*;
 
+import java.math.BigDecimal;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.smarthome.config.core.Configuration;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.types.Command;
+import org.openhab.binding.woehlke.WoehlkeBindingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import lusm.whoelke.electricityoutlet.ElectricityOutletHandler;
 
 /**
  * The {@link WoehlkeHandler} is responsible for handling commands, which are
@@ -29,10 +36,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author Lukas Smirek - Initial contribution
  */
- @NonNullByDefault
+@NonNullByDefault
 public class WoehlkeHandler extends BaseThingHandler {
 
     private final Logger logger = LoggerFactory.getLogger(WoehlkeHandler.class);
+
+    org.openhab.binding.woehlke.internal.ElectricityOutletHandler eoh;
 
     public WoehlkeHandler(Thing thing) {
         super(thing);
@@ -40,19 +49,43 @@ public class WoehlkeHandler extends BaseThingHandler {
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        if (channelUID.getId().equals(CHANNEL_1)) {
-            // TODO: handle command
 
-            // Note: if communication with thing fails for some reason,
-            // indicate that by setting the status with detail information
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
-            // "Could not control device at IP address x.x.x.x");
+        boolean setting;
+        if (command instanceof OnOffType) {
+            setting = OnOffType.ON.equals(command);
         }
+        switch (channelUID.getId()) {
+
+            case WoehlkeBindingConstants.CHANNEL_POWER_OUTLET_1:
+                eoh.setSocket1(setting);
+                break;
+
+            case WoehlkeBindingConstants.CHANNEL_POWER_OUTLET_2:
+                eoh.setSocket2(setting);
+                break;
+
+            case WoehlkeBindingConstants.CHANNEL_POWER_OUTLET_3:
+                eoh.setSocket3(setting);
+                break;
+
+        }
+        // Note: if communication with thing fails for some reason,
+        // indicate that by setting the status with detail information
+        // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR,
+        // "Could not control device at IP address x.x.x.x");
+    }
+
     }
 
     @Override
     public void initialize() {
-        // TODO: Initialize the thing. If done set status to ONLINE to indicate proper working.
+
+        Configuration config = getThing().getConfiguration();
+    String host =( (String) config.get(Constants.PROPERTY_HOST));
+        String port = (BigDecimal) config.get(PROPERTY_NTP_SERVER_PORT);
+        refreshInterval = (BigDecimal) config.get(PROPERTY_REFRESH_INTERVAL);
+        eoh = new org.openhab.binding.woehlke.internal.ElectricityOutletHandler(host,port)
+
         // Long running initialization should be done asynchronously in background.
         updateStatus(ThingStatus.ONLINE);
 

@@ -27,9 +27,14 @@ public class WoehlkeBindingConstants {
     private static final String BINDING_ID = "woehlke";
 
     // List of all Thing Type UIDs
-    public static final ThingTypeUID THING_TYPE_SAMPLE = new ThingTypeUID(BINDING_ID, "sample");
+    public static final String THING_TYPE_WEBSTECKDOSE = "websteckdose";
 
     // List of all Channel ids
-    public static final String CHANNEL_1 = "channel1";
+    public static final String CHANNEL_POWER_OUTLET_1 = "powerOutlet1";
+    public static final String CHANNEL_POWER_OUTLET_2 = "powerOutlet2";
+    public static final String CHANNEL_POWER_OUTLET_3 = "powerOutlet3";
+    public static final String CHANNEL_temperature = "temperature3";
+}
+
 
 }

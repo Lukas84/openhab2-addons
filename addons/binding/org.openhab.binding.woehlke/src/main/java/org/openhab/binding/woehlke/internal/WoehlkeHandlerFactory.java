@@ -12,8 +12,6 @@
  */
 package org.openhab.binding.woehlke.internal;
 
-import static org.openhab.binding.woehlke.WoehlkeBindingConstants.*;
-
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,13 +19,13 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.openhab.binding.woehlke.handler.Constants;
-import org.openhab.binding.woehlke.handler.WoehlkeHandler;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
+import org.openhab.binding.woehlke.WoehlkeBindingConstants;
+import org.openhab.binding.woehlke.handler.WoehlkeHandler;
 import org.osgi.service.component.annotations.Component;
 
 /**
@@ -41,7 +39,7 @@ import org.osgi.service.component.annotations.Component;
 public class WoehlkeHandlerFactory extends BaseThingHandlerFactory {
 
     private static final Set<ThingTypeUID> SUPPORTED_THING_TYPES_UIDS = Collections
-            .singleton(Constants.THING_TYPE_WOEHLKE);
+            .singleton(WoehlkeBindingConstants.THING_TYPE_WEBSTECKDOSE);
     private static Map<String, ThingHandler> woehlkeThingHandlers = new HashMap<>();
 
     @Override
@@ -55,10 +53,10 @@ public class WoehlkeHandlerFactory extends BaseThingHandlerFactory {
 
         ThingHandler websteckdose;
         if (thingTypeUID.equals(Constants.THING_TYPE_WEBSTECKDOSE)) {
-            websteckdose = n new WoehlkeHandler(thing);
+            websteckdose = new WoehlkeHandler(thing);
         }
 
-        if (websteckdose  != null) {
+        if (websteckdose != null) {
             woehlkeThingHandlers.put(thing.getUID().toString(), websteckdose);
         }
 
